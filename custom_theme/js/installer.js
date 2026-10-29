@@ -24,8 +24,8 @@ function handleStateEvent(ev) {
             if (chipFamily) env += " - "
         }
         if (chipFamily) env += obj.chipFamily;
-        if (env == "") env = "&nbsp;";
-        document.getElementById('env').innerHTML = env;
+        if (env == "") env = "\u00a0";
+        document.getElementById('env').textContent = env;
 
         //hide button and show log
         if (s == "initializing") {
@@ -61,6 +61,11 @@ function setManifest() {
     firmware += "_";
     firmware += opt.value;
     firmware += "MB.bin";
+
+    // Sallitaan vain turvalliset tiedostonimet (estää javascript:/data:-URI:t ja polkukävelyn)
+    if (!/^[A-Za-z0-9_.-]+$/.test(firmware)) {
+        throw new Error("Invalid firmware name");
+    }
 
     document.getElementById('inst').setAttribute('manifest', man);
     document.getElementById('link').setAttribute('href', "../assets/firmware/" + firmware);

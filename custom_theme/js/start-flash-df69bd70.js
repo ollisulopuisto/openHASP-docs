@@ -9,7 +9,7 @@ const e = e => { let t = []; for (let s of e) 219 == s ? t = t.concat([219, 221]
     },
     s = (e, ...t) => {
         let s = 0;
-        if (e.replace(/[<>]/, "").length != t.length) throw new Error("Pack format to Argument count mismatch");
+        if (e.replace(/[<>]/g, "").length != t.length) throw new Error("Pack format to Argument count mismatch");
         let r = [],
             i = !0;
         const n = (e, t) => { for (let s = 0; s < t; s++) i ? r.push(e >> 8 * s & 255) : r.push(e >> 8 * (t - s) & 255) };
