@@ -2,11 +2,15 @@
 
 ## Raportoidut CodeQL-löydökset: väärä positiivinen
 
-Oletushaaraan `0.7.0` kohdistuneessa turvallisuustarkastuksessa (2026-10-29) raportoitiin kaksi `js/xss-through-dom`-havaintoa:
+Oletushaaraan `0.7.0` kohdistuneissa turvallisuustarkastuksissa (2026-10-29 ja 2026-11-09) raportoitiin kaksi `js/xss-through-dom`-havaintoa:
 
 * `custom_theme/js/start-flash-df69bd70.js:759` — 2 esiintymää
 
 Molemmat havainnot osuvat **minifioituun, vendoroituun kolmannen osapuolen kirjastoon** (`lit-html` 1.4.1 / `LitElement` 2.4.0 runtime), ei repositorion omaan koodiin. Ne ovat **väärä positiivinen**, ja niitä ei korjata koodimuutoksella.
+
+### Regressiotesti (vihreä)
+
+`tests/lit-security.cjs` suorittaa toimitetun nipun jsdomissa ja vahvistaa, että pahantahtoinen merkkaus (esim. `<img src=x onerror="...">` ja `<svg onload="...">`) säilytetään tekstinä: sekä `esp-web-flash-log`-komponentin shadow-juuressa että renderöidyssä lit-mallissa ei synny `img`-/`script`-/`svg`-elementtejä eikä skriptiä suoriteta (`window.pwned` jää määrittelemättä). Testi on vihreä (`PASS actual bundle: both Lit runtimes preserve malicious markup as text`), joten havainnot eivät johda hyödynnettävään DOM XSS:ään.
 
 ### Perustelut
 
